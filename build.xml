@@ -1,0 +1,16 @@
+<project>
+	<target name="buildwar" >
+		<war destfile="JavadocIndex.war" webxml="WebContent/WEB-INF/web.xml">
+		  <fileset dir="WebContent"/>
+		  <webinf dir="starter"/>
+		  <classes dir="build/classes"/>
+		</war>
+	</target>
+	<target name="deploy" depends="buildwar">
+		<copy file="JavadocIndex.war" tofile="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex.war"/>
+	</target>
+	<target name="javadoc">
+		<javadoc sourcepath="src" destdir="apidocs" >
+		</javadoc>
+	</target>
+</project>

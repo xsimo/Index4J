@@ -1,0 +1,4 @@
+©XSIMO.CA 2016
+You have the right to copy and redistribute and modify this software as long as the jar libraries contained are included with the original licenses text: Eclipse public license, Apache license and Gnu Public License which are in this project's LEGAL folder.
+
+Les images geodes.jpg et favicon.ico, propriété de l'université de Montreal sont utilisés sous capacité de droit.

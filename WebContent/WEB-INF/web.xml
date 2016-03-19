@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>JavadocIndexer</display-name>
+	<servlet>
+		<servlet-name>Search</servlet-name>
+		<!-- to search the Javadoc Indexes -->
+		<servlet-class>ca.diro.javadocindexer.servlets.SearchServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Upload</servlet-name>
+		<!-- for uploading Javadoc jar or zip files -->
+		<servlet-class>ca.diro.javadocindexer.servlets.UploadServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>Logout</servlet-name>
+		<!-- invalidates the session -->
+		<servlet-class>ca.diro.javadocindexer.servlets.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Library</servlet-name>
+		<!-- Delivers the actual javadoc -->
+		<servlet-class>ca.diro.javadocindexer.servlets.LibraryServlet</servlet-class>
+	</servlet>
+	
+	<!-- INFO SEC -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>MyFirst</web-resource-name>
+			<description> accessible by authenticated users of the role1 role</description>
+			<url-pattern>/upload/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>POST</http-method>
+			<http-method>PUT</http-method>
+			<http-method>DELETE</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>These roles are allowed access</description>
+			<role-name>role1</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<realm-name>MyFirst Protected Area</realm-name>
+		<form-login-config>
+			<form-login-page>/login.jsp</form-login-page>
+			<form-error-page>/login_error.jsp</form-error-page>
+		</form-login-config>
+	</login-config>
+	<security-role>
+		<description>Only admin role is allowed to access this web application</description>
+		<role-name>role1</role-name>
+	</security-role>
+
+
+	<!-- MMMMMMMMMMMMMMMMMMMMMMMMMAPPING -->
+	<servlet-mapping>
+		<servlet-name>Search</servlet-name>
+		<url-pattern>/Search.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Upload</servlet-name>
+		<url-pattern>/upload/Upload.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Logout</servlet-name>
+		<url-pattern>/Logout.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Library</servlet-name>
+		<url-pattern>/library/*</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>search.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
