@@ -2,8 +2,7 @@
 	<target name="buildwar" >
 		<war destfile="JavadocIndex.war" webxml="WebContent/WEB-INF/web.xml">
 		  <fileset dir="WebContent"/>
-		  <webinf dir="starter"/>
-		  <classes dir="build/classes"/>
+		  <classes dir="WebContent/classes"/>
 		</war>
 	</target>
 	<target name="deploy" depends="buildwar">

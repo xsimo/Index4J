@@ -41,7 +41,7 @@ import ca.diro.javadocindexer.ManagedException;
 
 /**
  * 
- * Ce servlet répond au commande de recherche dans la documentation javadoc
+ * Ce servlet r&eacute;pond au commande de recherche dans la documentation javadoc
  * 
  * 
  * @author aramesim
@@ -51,7 +51,7 @@ import ca.diro.javadocindexer.ManagedException;
 public class SearchServlet extends javax.servlet.http.HttpServlet {
 
 	static IndexSearcher searcher;
-	static int numberOfPages = 10;
+	static int GOOGLE = Integer.MAX_VALUE;
 	private static final long serialVersionUID = 1L;
 	protected static int contextBefore = 4;
 	protected static int contextAfter = 6;
@@ -59,9 +59,9 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 	
 	/**
 	 * les parametres du servlet sont : 
-	 * - desired : la requete textuelle
-	 * - class : boolean pour chercher un classe
-	 * - method : boolean pour chercher un méthode
+	 * - request.desired : la requete textuelle
+	 * - request.class : boolean pour chercher un classe
+	 * - request.method : boolean pour chercher un m&eacute;thode
 	 * 
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -103,7 +103,7 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			/*org.apache.lucene.queryParser.
 			queryNode = new org.apache.lucene.queryParser.core.nodes.BoostQueryNode();
 			*/
-			TopDocs results = searcher.search(query, numberOfPages * Integer.parseInt(request.getParameter("resultsPerPage")));
+			TopDocs results = searcher.search(query, GOOGLE);
 			
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
 			Highlighter highlighter = new Highlighter(htmlFormatter, new SimpleHTMLEncoder(), new QueryScorer(query));
@@ -275,10 +275,5 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 		ServletContext ctxt = getServletContext();
 		RequestDispatcher rd = ctxt.getRequestDispatcher(url);
 		rd.forward(request, response);
-	}
-
-	private Exception ManagedException(String string) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
