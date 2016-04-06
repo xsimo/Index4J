@@ -1,4 +1,5 @@
 	<div style="float:right;">
+	<a href="https://github.com/xsimo/JavadocIndexer">source code</a>&nbsp;&nbsp;
 	<% 
 		boolean notLoggingOut = true;
 		if(request.getAttribute("loggingOut")!=null){
