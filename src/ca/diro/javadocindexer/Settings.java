@@ -1,8 +1,11 @@
 package ca.diro.javadocindexer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Properties;
 import java.lang.ExceptionInInitializerError;
 
 public final class Settings {
@@ -20,6 +23,21 @@ public final class Settings {
 	public static ArrayList<String> libraryList;
 
 	public Settings(String realPath) throws ExceptionInInitializerError{
+		
+		Properties properties = new Properties();
+		File propertiesFile = new File(Thread.currentThread().getContextClassLoader()
+				.getResource("Index4J.properties").getPath());
+		
+		try {
+			properties.load(new FileInputStream(propertiesFile));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new ExceptionInInitializerError();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ExceptionInInitializerError();
+		}
+		
 		tmpDir = new File(TMP_DIR_PATH);
 		tmpDir.mkdir();
 		if(!tmpDir.isDirectory()) {
@@ -27,17 +45,12 @@ public final class Settings {
 		}
 		String realIndexPath = "";
 		String realLibraryPath = "";
-		if(realPath.contains(":")){
-			INDEX_DIR_PATH = realIndexPath = "G:\\javadocIndexerLib\\index";
-			staticHostURI = "http://localhost/";
-			DESTINATION_DIR_PATH = realLibraryPath = "G:\\javadocIndexerLib\\library"; 
-			dynamicHostURI = "http://localhost:8080";
-		}else{
-			INDEX_DIR_PATH = realIndexPath = "/opt/javadocIndexerLib";
-			staticHostURI = "http://simonarame.com/";
-			DESTINATION_DIR_PATH = realLibraryPath = "/var/www/html/public/simonarame.com/library";
-			dynamicHostURI = "http://simonarame.com:8080";
-		}
+
+		INDEX_DIR_PATH = realIndexPath = (String) properties.get("realIndexPath");
+		staticHostURI = (String) properties.get("staticHostURI");
+		DESTINATION_DIR_PATH = realLibraryPath = (String) properties.get("realLibraryPath"); 
+		dynamicHostURI = (String) properties.get("dynamicHostURI");
+		
 		
 		destinationDir = new File(realLibraryPath);
 		destinationDir.mkdir();
