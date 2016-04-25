@@ -7,16 +7,16 @@
 		  <classes dir="WebContent/classes"/>
 		</war>
 	</target>
-	<target name="deploy" depends="buildwar">
+	<!--<target name="deploy" depends="buildwar">
 		<copy file="JavadocIndex.war" tofile="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex.war"/>
-	</target>
+	</target>-->
 	<target name="javadoc">
 		<javadoc sourcepath="src" destdir="apidocs" >
 		</javadoc>
 	</target>
 	<target name="clean">
 		<delete file="JavadocIndex.war"/>
-		<delete file="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex.war"/>
-		<delete dir="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex"/>
+		<!--<delete file="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex.war"/>
+		<delete dir="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex"/>-->
 	</target>
 </project>
