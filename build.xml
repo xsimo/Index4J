@@ -2,6 +2,8 @@
 	<target name="buildwar" >
 		<war destfile="JavadocIndex.war" webxml="WebContent/WEB-INF/web.xml">
 		  <fileset dir="WebContent"/>
+		  <classes dir="resources"/>
+		  <lib dir="libs"/>
 		  <classes dir="WebContent/classes"/>
 		</war>
 	</target>
@@ -11,5 +13,10 @@
 	<target name="javadoc">
 		<javadoc sourcepath="src" destdir="apidocs" >
 		</javadoc>
+	</target>
+	<target name="clean">
+		<delete file="JavadocIndex.war"/>
+		<delete file="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex.war"/>
+		<delete dir="g:\CREA\apache-tomcat-7.0.67\webapps\JavadocIndex"/>
 	</target>
 </project>
