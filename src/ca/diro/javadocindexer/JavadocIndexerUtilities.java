@@ -17,6 +17,7 @@ public class JavadocIndexerUtilities {
 		KeywordAnalyzer kwa = new KeywordAnalyzer();
 		PerFieldAnalyzerWrapper analyzer = new PerFieldAnalyzerWrapper(sa);
 		analyzer.addAnalyzer("classTitle", kwa);
+		analyzer.addAnalyzer("returnType", kwa);
 		analyzer.addAnalyzer("methodNames", kwa);
 		analyzer.addAnalyzer("camelCase", kwa);
 		analyzer.addAnalyzer("path", kwa);

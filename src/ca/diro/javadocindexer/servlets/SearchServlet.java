@@ -91,6 +91,9 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			if(request.getParameter("package")!=null){
 				fieldsList.add("packageName");
 			}
+			if(request.getParameter("returnType")!=null ){
+				fieldsList.add("returnType");
+			}
 			if(request.getParameter("content")!=null || fieldsList.size()==0){
 				fieldsList.add("contents");
 			}

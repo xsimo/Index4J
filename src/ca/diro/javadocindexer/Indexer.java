@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.TextExtractor;
@@ -168,6 +170,55 @@ public class Indexer {
 						methodField.setBoost(16.0f);
 						methodField.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
 						doc.add(methodField);
+						
+						//Adding the return types
+						
+						int boundedToSignatureEnd = StringUtils.indexOfIgnoreCase(oneMethod,"<div");
+						if(boundedToSignatureEnd==-1){
+							boundedToSignatureEnd = StringUtils.indexOfIgnoreCase(oneMethod, "<dl>");
+							if(boundedToSignatureEnd==-1){
+								boundedToSignatureEnd = StringUtils.indexOfIgnoreCase(oneMethod, "</li>");
+							}
+						}
+						String boundedToSignature = oneMethod.substring(0,boundedToSignatureEnd);
+						
+						int preBegin = StringUtils.indexOfIgnoreCase(boundedToSignature,"<pre>");
+						int preEnd = StringUtils.indexOfIgnoreCase(boundedToSignature, "</pre>");
+						if(preBegin!=-1 && preEnd !=-1){
+							String narrow = boundedToSignature.substring(preBegin,preEnd);
+							
+							//first check if return type is void
+							Pattern voidPattern = Pattern.compile("<pre>[^(]*void[^(]+");
+							Matcher mVoid = voidPattern.matcher(narrow);
+							if(!mVoid.find()){
+								String payload ="";
+								Pattern pattern = Pattern.compile("<a href=\"[^\"]+\" title=\"[^\"]+\">([^<]+)</a>");
+								Matcher m = pattern.matcher(narrow);
+								if(m.find()){
+										payload = m.group(1);
+								}
+								while(payload.indexOf("@")!=-1){
+									narrow = narrow.substring(m.group(0).length());
+									pattern = Pattern.compile("<a href=\"[^\"]+\" title=\"[^\"]+\">([^<]+)</a>");
+									m = pattern.matcher(narrow);
+									if(m.find()){
+										payload = m.group(1);
+									}else{
+										payload = "";
+									}
+								}
+								if(!payload.equals("")){
+									Field returnTypeField = new Field("returnType",payload,Field.Store.YES,Field.Index.ANALYZED);
+									returnTypeField.setBoost(16.0f);
+									doc.add(returnTypeField);
+								}
+							}else{
+								String payload = "void";
+								Field returnTypeField = new Field("returnType",payload,Field.Store.YES,Field.Index.ANALYZED);
+								returnTypeField.setBoost(16.0f);
+								doc.add(returnTypeField);
+							}
+						}
 					}else{
 						//But If (as in Java 6's Comparable.html), a method have more than one name anchor before its title so here we continue
 					}
