@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.lang.ExceptionInInitializerError;
 
 public final class Settings {
@@ -66,13 +69,17 @@ public final class Settings {
 			throw new ExceptionInInitializerError("INDEX_DIR_PATH"+" is not a directory");
 		}
 		libraryList = new ArrayList<String>();
+		Map<Long, String> lastModOrderedList = new TreeMap<Long, String>();
+		
 		File [] libraries = indexDir.listFiles();
 		for(File lib : libraries){
 			if(lib.isDirectory()){
-				libraryList.add(lib.getName());
+				lastModOrderedList.put(lib.lastModified(), lib.getName());
 			}
 		}
-		Collections.sort(libraryList);
+		for(Map.Entry<Long,String> entry: lastModOrderedList.entrySet()){
+			libraryList.add(entry.getValue());
+		}
 		WebContentDir = realPath;
 	}
 	
