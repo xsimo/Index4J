@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 import java.lang.ExceptionInInitializerError;
 
@@ -71,6 +72,7 @@ public final class Settings {
 				libraryList.add(lib.getName());
 			}
 		}
+		Collections.sort(libraryList);
 		WebContentDir = realPath;
 	}
 	
