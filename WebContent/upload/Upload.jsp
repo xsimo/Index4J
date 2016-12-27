@@ -10,7 +10,7 @@
 <h4>UPLOAD</h4>
 	Soumettez votre propre javadoc et elle sera index&eacute;e par ce syst&egrave;me <i>(..l'op&eacute;ration peut prendre plusieurs minutes... )</i><br><br>	
 	Fichier de javadoc *.zip ou *.jar : <br>&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" name="file1"/><br>
-	Nom de la librarie et version : <br>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="libraryName"/><br><br>
+	Nom de la librarie et version (max 50 chars) : <br>&nbsp;&nbsp;&nbsp;&nbsp;<input maxlength="50" type="text" name="libraryName"/><br><br>
 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="Submit" value="Soummettre"/><br>
 </form>
 <form style="clear:both;"></form>

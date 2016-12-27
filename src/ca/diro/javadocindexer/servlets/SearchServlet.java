@@ -53,6 +53,7 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 	static IndexSearcher searcher;
 	static int GOOGLE = Integer.MAX_VALUE;
 	private static final long serialVersionUID = 1L;
+	private static final int req_maxlength = 50;
 	protected static int contextBefore = 4;
 	protected static int contextAfter = 6;
 	protected static int numberOfHighlightedHits = 3;
@@ -66,8 +67,13 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String req = (String)request.getParameter("desired");
+		request.setAttribute("resultList",null);
 		String out="";
 		try{
+			if(req.length()>req_maxlength){
+				throw new IOException("Request must no exceed "+req_maxlength+" chars");
+			}
+			
 			if(request.getParameter("libraryName")==null){
 				throw new ManagedException("managed");
 			}
@@ -262,17 +268,19 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 				out+="</li>\n";
 			}
 			out+="</ul></div>";
+			request.setAttribute("resultList",out);
 		}catch(IOException ioe){
-			out+="ok-1"+ioe.getMessage();
+			request.setAttribute("isError",ioe.getMessage());
 			ioe.printStackTrace();
 		}catch(ManagedException me){
 			/* ;-) */
+			request.setAttribute("resultList",out);
 		}catch(Exception pe){
-			out+="ok-2"+pe.getMessage();
+			request.setAttribute("isError",pe.getMessage());
 			pe.printStackTrace();
 		}
 		
-		request.setAttribute("resultList",out);
+		
 		//request.setAttribute("debug", );
 		String url="/search.jsp";
 		ServletContext ctxt = getServletContext();

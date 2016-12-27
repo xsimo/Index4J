@@ -35,6 +35,8 @@ import ca.diro.javadocindexer.Unzip;
  */
 public class UploadServlet extends HttpServlet {
 	
+	private static final int libraryNameMaxLength = 50;
+	
 	public void init(ServletConfig config) throws ServletException, ExceptionInInitializerError {
 		super.init(config);
 		Settings instanceNotUsed = new Settings(getServletContext().getRealPath("/")); 
@@ -91,9 +93,13 @@ public class UploadServlet extends HttpServlet {
 					libraryName = item.getString();
 				}
 			}
-			if(!StringUtils.isAsciiPrintable(libraryName)){
+			if(!StringUtils.isAsciiPrintable(libraryName) || libraryName.length()>libraryNameMaxLength){
 				String url="/upload/Upload.jsp";
-				request.setAttribute("message", "Le nom de librairie ne doit pas contenir de caract&egrave;res accentu&eacute;s");
+				if(libraryName.length()>libraryNameMaxLength){
+					request.setAttribute("message", "Le nom de librairie ne doit pas d&eacute;passer "+libraryNameMaxLength+" caract&egrave;res");
+				}else{
+					request.setAttribute("message", "Le nom de librairie ne doit pas contenir de caract&egrave;res accentu&eacute;s");
+				}
 				ServletContext ctxt = getServletContext();
 				RequestDispatcher rd = ctxt.getRequestDispatcher(url);
 				rd.forward(request, response);

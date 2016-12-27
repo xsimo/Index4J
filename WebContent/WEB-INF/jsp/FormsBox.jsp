@@ -27,7 +27,7 @@
 			<%	}
 			%>
 		</select> <br>
-		<input style="color:<%if(request.getParameter("desired")!=null){%>black<%}else{ %>gray<%} %>;" id="text_query" type="text" value="<%if(request.getParameter("desired")!=null){%><%=request.getParameter("desired")%><%}else{ %>Entrez votre requ&ecirc;te"<%} %>" <%if(request.getParameter("desired")==null){%>onblur="write_query();" onfocus="erase();"<%} %> name="desired"></input></td>
+		<input maxlength="50" style="color:<%if(request.getParameter("desired")!=null){%>black<%}else{ %>gray<%} %>;" id="text_query" type="text" value="<%if(request.getParameter("desired")!=null){%><%=request.getParameter("desired")%><%}else{ %>Entrez votre requ&ecirc;te"<%} %>" <%if(request.getParameter("desired")==null){%>onblur="write_query();" onfocus="erase();"<%} %> name="desired"></input></td>
 		<td><input type="checkbox" name="class" <%if((request.getParameter("class")!=null)||request.getParameter("desired")==null){%>checked="class"<%}%>></input>Nom de Classes</td></tr>
 		<tr><td><input type="checkbox" name="method" <%if(request.getParameter("method")!=null){%>checked="checked"<%}%>></input>Nom de M&eacute;thodes</td></tr>
 		<tr><td><input type="checkbox" name="package" <%if(request.getParameter("package")!=null){%>checked="checked"<%}%>></input>Nom de Package</td></tr>
