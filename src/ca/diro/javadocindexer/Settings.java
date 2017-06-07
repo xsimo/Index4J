@@ -29,11 +29,10 @@ public final class Settings {
 	public Settings(String realPath) throws ExceptionInInitializerError{
 		
 		Properties properties = new Properties();
-		File propertiesFile = new File(Thread.currentThread().getContextClassLoader()
-				.getResource("Index4J.properties").getPath());
 		
 		try {
-			properties.load(new FileInputStream(propertiesFile));
+			properties.load(org.apache.tomcat.util.file.ConfigFileLoader
+					.getInputStream("webapps/JavadocIndex/WEB-INF/classes/Index4J.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new ExceptionInInitializerError();
