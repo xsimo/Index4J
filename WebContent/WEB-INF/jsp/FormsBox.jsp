@@ -28,11 +28,11 @@
 			%>
 		</select> <br>
 		<input maxlength="50" style="color:<%if(request.getParameter("desired")!=null){%>black<%}else{ %>gray<%} %>;" id="text_query" type="text" value="<%if(request.getParameter("desired")!=null){%><%=request.getParameter("desired")%><%}else{ %>Entrez votre requ&ecirc;te"<%} %>" <%if(request.getParameter("desired")==null){%>onblur="write_query();" onfocus="erase();"<%} %> name="desired"></input></td>
-		<td><input type="checkbox" name="class" <%if((request.getParameter("class")!=null)||request.getParameter("desired")==null){%>checked="class"<%}%>></input>Nom de Classes</td></tr>
+		<td><input type="checkbox" name="class" <%if((request.getParameter("class")!=null)){%>checked="class"<%}%>></input>Nom de Classes</td></tr>
 		<tr><td><input type="checkbox" name="method" <%if(request.getParameter("method")!=null){%>checked="checked"<%}%>></input>Nom de M&eacute;thodes</td></tr>
 		<tr><td><input type="checkbox" name="package" <%if(request.getParameter("package")!=null){%>checked="checked"<%}%>></input>Nom de Package</td></tr>
 		<tr><td><input type="checkbox" name="returnType" <%if(request.getParameter("returnType")!=null){%>checked="checked"<%}%>></input>Type de retour</td></tr>
-		<tr><td><input type="checkbox" name="content" <%if(request.getParameter("content")!=null){%>checked="checked"<%}%>></input>Contenu</td></tr>
+		 <tr><td><input type="checkbox" name="content" <%if((request.getParameter("content")!=null)||request.getParameter("desired")==null){%>checked="checked"<%}%>></input>Contenu</td></tr>
 		<tr><td><select name="resultsPerPage">
 			<option value="10" <%if((request.getParameter("resultsPerPage")!=null)&& request.getParameter("resultsPerPage").equals("10")){%><%="selected=\"selected\"" %><%} %>><%=10 %></option>
 			<option value="20" <%if((request.getParameter("resultsPerPage")!=null)&& request.getParameter("resultsPerPage").equals("20")){%><%="selected=\"selected\"" %><%} %>><%=20 %></option>
