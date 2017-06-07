@@ -4,7 +4,7 @@ Search can be made by class name, by method name, by package name or simply by t
 <br>
 <h2>Todo</h2>
 <ul>
-<li>Searches by method return type</li>
+<li><strike>Searches by method return type</strike></li>
 <li>Mavenize the project so that properties can be in maven profiles
 </ul>
 <br>
