@@ -78,6 +78,7 @@ public class JavadocIndexerUtilities {
 	 * @param element
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	static <T> T[] append(T[] arr, T element) {
 	    final int N = arr.length;
 	    Object[] newArray = new Object[N+1];
