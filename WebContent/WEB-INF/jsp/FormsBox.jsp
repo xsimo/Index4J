@@ -21,6 +21,9 @@
 	<table>
 		<tr><td rowspan="5">
 		<select name="libraryName">
+		
+			<option value="all" <%if((request.getParameter("libraryName")!=null)&& request.getParameter("libraryName").equals("all")){%><%="selected=\"selected\"" %><%} %>>Toutes les libraries</option>
+		
 			<% for(String lib : Settings.libraryList){
 				%>
 				<option value="<%=lib %>" <%if((request.getParameter("libraryName")!=null)&& request.getParameter("libraryName").equals(lib)){%><%="selected=\"selected\"" %><%} %>><%=lib %></option>

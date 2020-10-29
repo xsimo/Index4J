@@ -20,6 +20,8 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -33,6 +35,7 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.ReaderUtil;
 import org.apache.lucene.util.Version;
 
 import ca.diro.javadocindexer.Settings;
@@ -77,13 +80,33 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			if(request.getParameter("libraryName")==null){
 				throw new ManagedException("managed");
 			}
-			String indexPath = Settings.INDEX_DIR_PATH+Settings.sep+request.getParameter("libraryName"); 
-			searcher = new IndexSearcher(FSDirectory.open(new File(indexPath)));
+			
+			ArrayList<IndexReader> libraryIndexes = new ArrayList<IndexReader>();
+			String libraryName = request.getParameter("libraryName");
+			
+			if(!libraryName.equals("all")) {
+				
+				String indexPath = Settings.INDEX_DIR_PATH+Settings.sep+libraryName;
+				searcher = new IndexSearcher(IndexReader.open(FSDirectory.open(new File(indexPath))));
+				
+				
+			}else {
+				IndexReader[] readers = new IndexReader[Settings.libraryList.size()];
+				for(int i = 0;i<Settings.libraryList.size();i++) {
+					String indexPath = Settings.INDEX_DIR_PATH + Settings.sep + Settings.libraryList.get(i);
+					readers[i] = IndexReader.open(FSDirectory.open(new File(indexPath)));
+					
+				}
+				MultiReader mreader = new MultiReader(readers,true);
+				
+				searcher = new IndexSearcher(mreader);
+			}
+			
 			Analyzer analyzer = JavadocIndexerUtilities.getAnalyzer();
 			Query query = null;
 			ArrayList<String> fieldsList = new ArrayList<String>();
 			
-			//A cause d'un bug Lucene, l'Analyseur par défaut (StandardAnalyzer) n'est pas chargé
+			//A cause d'un bug Lucene, l'Analyseur par dï¿½faut (StandardAnalyzer) n'est pas chargï¿½
 			//si l'on cherche des "fields" qui utilisent uniquement le KeywordAnalyser LUCENE3434(commentaire)
 			fieldsList.add("modified");
 			
@@ -116,6 +139,7 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
 			Highlighter highlighter = new Highlighter(htmlFormatter, new SimpleHTMLEncoder(), new QueryScorer(query));
+			
 			ScoreDoc[] hits = results.scoreDocs;
 			int numTotalHits = results.totalHits;
 			request.setAttribute("numTotalHits", numTotalHits);
@@ -147,7 +171,15 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			resultsEnd = resultsStart + Integer.parseInt(request.getParameter("resultsPerPage"));
 			
 			for(int i = resultsStart;i<resultsEnd&&i<hits.length;i++){
+				MultiReader mr = (MultiReader)searcher.getIndexReader();
+				
 			    int id = hits[i].doc;
+			    
+			    Document d = mr.document(id);
+			    IndexReader subReader = ReaderUtil.subReader(id, mr);
+			    String libName = ((FSDirectory)subReader.directory()).getDirectory().getName();
+			    
+			    //String libName = Settings.libraryList.get(hits[i].shardIndex-1);
 			    Document doc = searcher.doc(id);
 			    String path = doc.get("path");
 				String content = doc.get("contents");
@@ -183,9 +215,9 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 				out+="<li>";
 				//path = path.substring(request.getContextPath().length());
 				if(true || doc.get("openSource")!=null && doc.get("openSource").equals("yes")){
-					out+="<a target=\"_self\" href=\""+request.getContextPath()+"/library/"+request.getParameter("libraryName")+path+"?query="+URLEncoder.encode(request.getQueryString(),"UTF-8")+"\">"+title+"</a> "+hits[i].score+"<br>";
+					out+="<a target=\"_self\" href=\""+request.getContextPath()+"/library/"+libName+path+"?query="+URLEncoder.encode(request.getQueryString(),"UTF-8")+"\">"+title+"</a> "+hits[i].score+"<br>";
 				}else{
-					out+="<a target=\"_blank\" href=\""+Settings.staticHostURI+request.getContextPath()+"library/"+request.getParameter("libraryName")+path+"\">"+title+"</a> "+hits[i].score+"<br>";
+					out+="<a target=\"_blank\" href=\""+Settings.staticHostURI+request.getContextPath()+"library/"+libName+path+"\">"+title+"</a> "+hits[i].score+"<br>";
 				}
 				//This new method uses highlight contrib but is no good for CamelCase field
 				//String text = doc.get("contents");
