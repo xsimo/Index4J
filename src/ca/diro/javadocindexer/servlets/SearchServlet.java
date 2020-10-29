@@ -171,15 +171,17 @@ public class SearchServlet extends javax.servlet.http.HttpServlet {
 			resultsEnd = resultsStart + Integer.parseInt(request.getParameter("resultsPerPage"));
 			
 			for(int i = resultsStart;i<resultsEnd&&i<hits.length;i++){
-				MultiReader mr = (MultiReader)searcher.getIndexReader();
-				
-			    int id = hits[i].doc;
+				int id = hits[i].doc;
+				String libName = null;
+				if(!libraryName.equals("all")) {
+					libName = libraryName;
+				}else {
+					MultiReader mr = (MultiReader)searcher.getIndexReader();
+					Document d = mr.document(id);
+					IndexReader subReader = ReaderUtil.subReader(id, mr);
+					libName = ((FSDirectory)subReader.directory()).getDirectory().getName();
+				}
 			    
-			    Document d = mr.document(id);
-			    IndexReader subReader = ReaderUtil.subReader(id, mr);
-			    String libName = ((FSDirectory)subReader.directory()).getDirectory().getName();
-			    
-			    //String libName = Settings.libraryList.get(hits[i].shardIndex-1);
 			    Document doc = searcher.doc(id);
 			    String path = doc.get("path");
 				String content = doc.get("contents");
