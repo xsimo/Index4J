@@ -1,7 +1,6 @@
 <h1>Index4J</h1>
 Useful to search through any uploaded Javadoc.<br>
 Search can be made by class name, by method name, by package name or simply by text content<br>
-<br>
 <h2>Todo</h2>
 <ul>
 <li><strike>Searches by method return type</strike></li>
