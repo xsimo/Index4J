@@ -9,3 +9,4 @@
 /WebContent/META-INF/context.xml
 *.war
 target
+token
