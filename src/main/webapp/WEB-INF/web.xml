@@ -31,11 +31,6 @@
 			<web-resource-name>MyFirst</web-resource-name>
 			<description> accessible by authenticated users of the role1 role</description>
 			<url-pattern>/upload/*</url-pattern>
-			<http-method>GET</http-method>
-			<http-method>HEAD</http-method>
-			<http-method>POST</http-method>
-			<http-method>PUT</http-method>
-			<http-method>DELETE</http-method>
 		</web-resource-collection>
 		<auth-constraint>
 			<description>These roles are allowed access</description>

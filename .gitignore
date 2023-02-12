@@ -8,3 +8,4 @@
 /WebContent/WEB-INF/classes/Index4J.properties
 /WebContent/META-INF/context.xml
 *.war
+target

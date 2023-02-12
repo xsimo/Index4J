@@ -1,0 +1,8 @@
+<Context swallowOutput="true">
+	<Realm className="org.apache.catalina.realm.MemoryRealm"/>
+	<!--<Valve  className="org.apache.catalina.valves.AccessLogValve" 
+		directory="/var/log/tomcat/access_logs"
+		prefix="javadoc-index_access."
+		rotatable="false"
+		suffix="log" pattern="combined" />-->
+</Context>

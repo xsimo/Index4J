@@ -31,8 +31,8 @@ public final class Settings {
 		Properties properties = new Properties();
 		
 		try {
-			properties.load(org.apache.tomcat.util.file.ConfigFileLoader
-					.getInputStream("webapps/JavadocIndex/WEB-INF/classes/Index4J.properties"));
+			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("Index4J.properties"));
+			//org.apache.tomcat.util.file.ConfigFileLoader.getInputStream("index4jBase/JavadocIndex/WEB-INF/classes/Index4J.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new ExceptionInInitializerError();

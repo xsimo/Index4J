@@ -1,9 +1,0 @@
-<Context>
-	<Realm className="org.apache.catalina.realm.MemoryRealm"
-		pathname="/home/arame/tomcat-users-helios.xml"/>
-	<Valve  className="org.apache.catalina.valves.AccessLogValve"
-                directory="/home/arame/logs/"
-                prefix="javadoc-index_access."
-                rotatable="false"
-                suffix="log" pattern="combined" />
-</Context>

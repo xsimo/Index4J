@@ -1,9 +1,0 @@
-<Context>
-	<Realm className="org.apache.catalina.realm.MemoryRealm"
-		pathname="g:\d\tomcat-users.xml"/>
-	<Valve  className="org.apache.catalina.valves.AccessLogValve"
-                directory="g:\CREA\tomcat\logs"
-                prefix="javadoc-index_access."
-                rotatable="false"
-                suffix="log" pattern="combined" />
-</Context>

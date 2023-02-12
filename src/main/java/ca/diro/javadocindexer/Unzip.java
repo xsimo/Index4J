@@ -45,6 +45,7 @@ public class Unzip {
         }
 
         System.err.println("Extracting file: " + entry.getName());
+		new File(new File(basePath+Settings.sep+entry.getName()).getParent()).mkdirs();
         copyInputStream(zipFile.getInputStream(entry),
            new BufferedOutputStream(new FileOutputStream(basePath+Settings.sep+entry.getName())));
       }
