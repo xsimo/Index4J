@@ -4,7 +4,6 @@ Search can be made by class name, by method name, by package name or simply by t
 <h2>Todo</h2>
 <ul>
 <li><strike>Searches by method return type</strike></li>
-<li>Mavenize the project so that properties can be in maven profiles
 </ul>
 <h2>Install notes</h2>
 The static uncompressed javadoc html files are going to be transfered following protocols from the directory which name can be configured. Just set the realLibraryPath variable in the so called properties file (@see .gitignore). <br>
