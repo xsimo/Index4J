@@ -36,7 +36,7 @@ public class Indexer {
 	static Analyzer analyzer = JavadocIndexerUtilities.getAnalyzer();
 	static String libraryDirPath;
 	
-	public static String index(File libraryIndexDir, File libraryDir, String contextPath) throws Exception {
+	public static void index(File libraryIndexDir, File libraryDir, String contextPath, IndexingJob job) throws Exception {
 		libraryDirPath = libraryDir.getAbsolutePath();
 		
 		if(!libraryIndexDir.exists()){
@@ -47,12 +47,14 @@ public class Indexer {
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_34, analyzer);
 		iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		IndexWriter writer = new IndexWriter(dir, iwc);
-		String out = index(writer, libraryDir);
+		index(writer, libraryDir, job);
 		writer.close();
-		return out;
+		job.end();
+		return;
 	}
-	static String index(IndexWriter writer, File file){
+	static void index(IndexWriter writer, File file, IndexingJob job){
 		String out = "";
+		String modified28OctobreByeBye = "null";
 		// do not try to index files that cannot be read
 		if (file.canRead()) {
 			if (file.isDirectory()) {
@@ -60,23 +62,23 @@ public class Indexer {
 				// an IO error could occur
 				if (files != null) {
 					for (int i = 0; i < files.length; i++) {
-						out+=index(writer,new File(file, files[i]));
+						index(writer,new File(file, files[i]), job);
 					}
 				}
 			} else {
 				
 				if(!file.getName().endsWith(".html")){
-					return out;
+					return;
 				}
 				
-				//Détermination du type de document grace a cyberneko
+				//Dï¿½termination du type de document grace a cyberneko
 				DOMParser parser = new DOMParser();
 				try{
 					parser.parse(new InputSource(new FileInputStream(file.getPath())));
 				}catch(SAXException se){
-					out+="Erreur 1 : "+se.getMessage();
+					job.feedback("Erreur 1 : "+se.getMessage());
 				}catch(IOException ioe){
-					out+="Erreur 2 : "+ioe.getMessage();
+					job.feedback("Erreur 2 : "+ioe.getMessage());
 				}
 				Node node = parser.getDocument();
 				DocType currentDocType = JavadocIndexerUtilities.getDocType(node);
@@ -84,17 +86,17 @@ public class Indexer {
 				//s'il ne s'agit pas d'une classe
 				if(currentDocType!=DocType.CLASSE){
 					//C'est peut-etre un sommaire de paquet auquel cas on traite le document
-					out = indexPackageSummary(file, out, writer);
+					indexPackageSummary(file, out, writer, job);
 				}else{
-					out = indexClass(file,out,writer);
+					indexClass(file,out,writer, job);
 				}
 			}
 		}else{
-			out+="\n Error : can not read "+file.getAbsolutePath();
+			job.feedback("\n Error : can not read "+file.getAbsolutePath());
 		}
-		return out;
+		return;
 	}
-	static String indexClass(File file,String out,IndexWriter writer){
+	static void indexClass(File file,String out,IndexWriter writer, IndexingJob job){
 		// make a new, empty document
 		Document doc = new Document();
 
@@ -104,7 +106,7 @@ public class Indexer {
 		doc.add(pathField);
 		
 		String title = file.getName().substring(0,file.getName().indexOf(".html"));
-		out+="\n"+title+" ";
+		job.feedback("\n"+title+" ");
 		
 		//Title field
 		Field classTitleField = new Field("classTitle",title,Field.Store.YES, Field.Index.ANALYZED);
@@ -126,7 +128,7 @@ public class Indexer {
 			while((line= raf.readLine())!=null)content +=line;
 		}catch(IOException ioe){
 			ioe.printStackTrace();
-			out+="Erreur 3 : "+ioe.getMessage();
+			job.feedback("Erreur 3 : "+ioe.getMessage());
 		}finally{
 			try{raf.close();}catch(IOException ioe1){;}
 		}
@@ -248,17 +250,17 @@ public class Indexer {
 			doc.add(camelCaseField);
 		}
 		try{
-			out+="\nupdating " + file;
+			job.feedback("\nupdating " + file);
 			System.out.println("updating "+file);
 			
 			writer.updateDocument(new Term("path", pathField.stringValue()), doc, analyzer);
 		}catch(IOException ioe){
 			ioe.printStackTrace();
-			out+="Erreur 4 : "+ioe.getMessage();
+			job.feedback("Erreur 4 : "+ioe.getMessage());
 		}
-		return out;
+		return;
 	}
-	static String indexPackageSummary(File file, String out,IndexWriter writer){
+	static void indexPackageSummary(File file, String out,IndexWriter writer, IndexingJob job){
 		String title = file.getName().substring(0,file.getName().indexOf(".html"));
 		if(title.equals("package-summary")){
 			Document doc = new Document();
@@ -280,9 +282,11 @@ public class Indexer {
 				String line = "";
 				while((line= raf.readLine())!=null)content +=line;
 			} catch (FileNotFoundException e) {
-				return out+"ok3"+e.getMessage();
+				job.feedback("ok3"+e.getMessage());
+				return;
 			} catch (IOException ioe) {
-				return out + "ok4"+ioe.getMessage();
+				job.feedback("ok4"+ioe.getMessage());
+				return;
 			} finally{
 				try{raf.close();}catch(IOException ioe1){;}
 			}
@@ -334,17 +338,18 @@ public class Indexer {
 			doc.add(contentField);
 			
 			//Ecriture du document dans l'index
-			out+="\nupdating " + file;
+			job.feedback("\nupdating " + file);
 			System.out.println("updating "+file);
 			try{
 				
 				writer.updateDocument(new Term("path", pathField.stringValue()), doc, analyzer);
 			}catch(IOException ioe){
 				ioe.printStackTrace();
-				out+="Erreur 5 : "+ioe.getMessage();
+				job.feedback("Erreur 5 : "+ioe.getMessage());
 			}
 			
 		}
-		return out;
+		return;
 	}
+	
 }

@@ -70,6 +70,12 @@
 			<artifactId>bcel</artifactId>
 			<version>5.2</version>
 		</dependency>
+		<dependency>
+  			<groupId>org.apache.tomcat</groupId>
+  			<artifactId>tomcat-websocket-api</artifactId>
+  			<version>9.0.65</version>
+  			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

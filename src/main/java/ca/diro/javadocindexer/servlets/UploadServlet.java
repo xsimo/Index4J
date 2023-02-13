@@ -22,6 +22,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.diro.javadocindexer.Indexer;
+import ca.diro.javadocindexer.IndexingJob;
+import ca.diro.javadocindexer.JobManager;
 import ca.diro.javadocindexer.Settings;
 import ca.diro.javadocindexer.Unzip;
 
@@ -33,7 +35,7 @@ import ca.diro.javadocindexer.Unzip;
  * @author Simon Arame xsimo.ca opensource copyright 2016
  *
  */
-public class UploadServlet extends HttpServlet {
+public class UploadServlet extends AuthenticatedServlet {
 	
 	private static final int libraryNameMaxLength = 50;
 	
@@ -123,8 +125,16 @@ public class UploadServlet extends HttpServlet {
 			File libraryIndexDir = new File(Settings.INDEX_DIR_PATH+Settings.sep+libraryName);
 			libraryIndexDir.mkdir();
 			System.out.println(libraryIndexDir.getAbsolutePath());
-			out = Indexer.index(libraryIndexDir,libraryDir,request.getContextPath());
-			message = "Le fichier "+libraryName+" a &eacute;t&eacute; ajout&eacute; avec succ&egrave;s &agrave; l'index";
+			
+			IndexingJob job = new IndexingJob(libraryIndexDir, libraryDir, request.getContextPath(), libraryName);
+			Thread t = new Thread(job);
+			t.start();
+			((JobManager)(getServletContext().getAttribute("jobManager"))).addJob(request.getUserPrincipal().getName(), job);
+			
+			
+			message = "Le fichier "+libraryName+" est en cours d'ajout (" + job.getId() + ")"
+			+"<span style='display:none;' id='contextPathValue' >"+request.getContextPath()+"</span>"
+					+"<script type=\"text/javascript\" src=\""+request.getContextPath()+"/upload/Uplink.js\"></script>";
 			
 		}catch(FileUploadException fue){
 			message+= "error while uploading file 1 : " + fue.getMessage();
