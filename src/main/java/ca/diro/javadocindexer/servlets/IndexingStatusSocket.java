@@ -57,7 +57,7 @@ public class IndexingStatusSocket{
 	@OnMessage
     public void incoming(String message) {
 		if(!message.equals("cancel")) {
-			logger.log(Level.SEVERE, "Only accepting `cancel´ incoming message");
+			logger.log(Level.SEVERE, "Only accepting 'cancel' incoming message");
 			return;
 		}
 		HttpSession httpSession = (HttpSession) config.getUserProperties().get("httpSession");

@@ -34,7 +34,7 @@ public class JavadocIndexerUtilities {
 				}while(current!=null && current.getClass()!=org.apache.xerces.dom.CommentImpl.class);
 			}while(current!=null && !current.getNodeValue().contains("==="));
 			if(current!=null){
-				//Le critère pour savoir si le fichier en considÃ©ration est une classe
+				//Le critere pour savoir si le fichier en consideration est une classe
 				if(current.getNodeValue().equals(" ======== START OF CLASS DATA ======== ")){
 					return DocType.CLASSE;
 				}
