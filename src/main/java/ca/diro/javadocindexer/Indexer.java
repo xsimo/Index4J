@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +36,8 @@ public class Indexer {
 	public static boolean once;
 	static Analyzer analyzer = JavadocIndexerUtilities.getAnalyzer();
 	static String libraryDirPath;
+	
+	static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Indexer.class.getName());
 	
 	public static void index(File libraryIndexDir, File libraryDir, String contextPath, IndexingJob job) throws Exception {
 		libraryDirPath = libraryDir.getAbsolutePath();
@@ -71,13 +74,15 @@ public class Indexer {
 					return;
 				}
 				
-				//D�termination du type de document grace a cyberneko
+				//Determination du type de document grace a cyberneko
 				DOMParser parser = new DOMParser();
 				try{
 					parser.parse(new InputSource(new FileInputStream(file.getPath())));
 				}catch(SAXException se){
+					logger.log(Level.WARNING, se.getMessage(), se);
 					job.feedback("Erreur 1 : "+se.getMessage());
 				}catch(IOException ioe){
+					logger.log(Level.WARNING, ioe.getMessage(), ioe);
 					job.feedback("Erreur 2 : "+ioe.getMessage());
 				}
 				Node node = parser.getDocument();
@@ -127,7 +132,7 @@ public class Indexer {
 			raf = new RandomAccessFile(file,"r");
 			while((line= raf.readLine())!=null)content +=line;
 		}catch(IOException ioe){
-			ioe.printStackTrace();
+			logger.log(Level.WARNING, ioe.getMessage(), ioe);
 			job.feedback("Erreur 3 : "+ioe.getMessage());
 		}finally{
 			try{raf.close();}catch(IOException ioe1){;}
@@ -251,11 +256,11 @@ public class Indexer {
 		}
 		try{
 			job.feedback("\nupdating " + file);
-			System.out.println("updating "+file);
+			logger.log(Level.INFO, "updating "+file);
 			
 			writer.updateDocument(new Term("path", pathField.stringValue()), doc, analyzer);
 		}catch(IOException ioe){
-			ioe.printStackTrace();
+			logger.log(Level.WARNING, ioe.getMessage(), ioe);
 			job.feedback("Erreur 4 : "+ioe.getMessage());
 		}
 		return;
@@ -282,9 +287,11 @@ public class Indexer {
 				String line = "";
 				while((line= raf.readLine())!=null)content +=line;
 			} catch (FileNotFoundException e) {
+				logger.log(Level.SEVERE, e.getMessage(),e);
 				job.feedback("ok3"+e.getMessage());
 				return;
 			} catch (IOException ioe) {
+				logger.log(Level.SEVERE, ioe.getMessage(), ioe);
 				job.feedback("ok4"+ioe.getMessage());
 				return;
 			} finally{
@@ -339,12 +346,12 @@ public class Indexer {
 			
 			//Ecriture du document dans l'index
 			job.feedback("\nupdating " + file);
-			System.out.println("updating "+file);
+			logger.log(Level.INFO, "updating "+file);
 			try{
 				
 				writer.updateDocument(new Term("path", pathField.stringValue()), doc, analyzer);
 			}catch(IOException ioe){
-				ioe.printStackTrace();
+				logger.log(Level.SEVERE, ioe.getMessage(), ioe);
 				job.feedback("Erreur 5 : "+ioe.getMessage());
 			}
 			
