@@ -111,7 +111,7 @@ public class Indexer {
 		doc.add(pathField);
 		
 		String title = file.getName().substring(0,file.getName().indexOf(".html"));
-		job.feedback("\n"+title+" ");
+		job.feedback("\n"+file.toString());
 		
 		//Title field
 		Field classTitleField = new Field("classTitle",title,Field.Store.YES, Field.Index.ANALYZED);
@@ -255,7 +255,7 @@ public class Indexer {
 			doc.add(camelCaseField);
 		}
 		try{
-			job.feedback("\nupdating " + file);
+			//job.feedback("\nupdating " + file);
 			logger.log(Level.INFO, "updating "+file);
 			
 			writer.updateDocument(new Term("path", pathField.stringValue()), doc, analyzer);
