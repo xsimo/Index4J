@@ -8,6 +8,8 @@
 	<version>1.0</version>
 	
 	<dependencies>
+		
+		<!-- commons -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -23,6 +25,8 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
+		
+		<!-- particular -->
 		<dependency>
 			<groupId>net.htmlparser.jericho</groupId>
 			<artifactId>jericho-html</artifactId>
@@ -39,20 +43,19 @@
 			<version>3.4.0</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.0.8</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sourceforge.nekohtml</groupId>
 			<artifactId>nekohtml</artifactId>
 			<version>1.9.15</version>
 		</dependency>
+		
+		<!-- classic -->
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
 			<version>2.9.1</version>
 		</dependency>
+		
+		<!-- provided -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-servlet-api</artifactId>
@@ -66,16 +69,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.bcel</groupId>
-			<artifactId>bcel</artifactId>
-			<version>5.2</version>
-		</dependency>
-		<dependency>
   			<groupId>org.apache.tomcat</groupId>
   			<artifactId>tomcat-websocket-api</artifactId>
   			<version>9.0.65</version>
   			<scope>provided</scope>
 		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
