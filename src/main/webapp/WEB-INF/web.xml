@@ -50,8 +50,7 @@
 		<role-name>role1</role-name>
 	</security-role>
 
-
-	<!-- MMMMMMMMMMMMMMMMMMMMMMMMMAPPING -->
+	<!-- MAPPING -->
 	<servlet-mapping>
 		<servlet-name>Search</servlet-name>
 		<url-pattern>/Search.do</url-pattern>
