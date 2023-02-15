@@ -1,5 +1,8 @@
 package ca.diro.javadocindexer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
@@ -10,8 +13,10 @@ import org.w3c.dom.Node;
 import ca.diro.javadocindexer.Indexer.DocType;
 
 public class JavadocIndexerUtilities {
-
+	
 	public static int insert;
+	static Logger logger = Logger.getAnonymousLogger();
+	
 	public static Analyzer getAnalyzer(){
 		StandardAnalyzer sa = new StandardAnalyzer(Version.LUCENE_34);
 		KeywordAnalyzer kwa = new KeywordAnalyzer();
@@ -44,7 +49,7 @@ public class JavadocIndexerUtilities {
 	}
 	public static Node getNextNode(Node current){
 		if(current==null){
-			System.out.println("NODE IS NULL");
+			logger.log(Level.SEVERE,"NODE IS NULL");
 			return null;
 		}
 		boolean found = false;

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -38,6 +40,7 @@ import ca.diro.javadocindexer.Unzip;
 public class UploadServlet extends AuthenticatedServlet {
 	
 	private static final int libraryNameMaxLength = 50;
+	static Logger logger = Logger.getAnonymousLogger();
 	
 	public void init(ServletConfig config) throws ServletException, ExceptionInInitializerError {
 		super.init(config);
@@ -124,7 +127,7 @@ public class UploadServlet extends AuthenticatedServlet {
 			Unzip.main(file.getAbsolutePath(),libraryDir.getAbsolutePath());
 			File libraryIndexDir = new File(Settings.INDEX_DIR_PATH+Settings.sep+libraryName);
 			libraryIndexDir.mkdir();
-			System.out.println(libraryIndexDir.getAbsolutePath());
+			logger.log(Level.INFO,libraryIndexDir.getAbsolutePath());
 			
 			IndexingJob job = new IndexingJob(libraryIndexDir, libraryDir, request.getContextPath(), libraryName);
 			Thread t = new Thread(job);

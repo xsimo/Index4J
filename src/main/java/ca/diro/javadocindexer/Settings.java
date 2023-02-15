@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.lang.ExceptionInInitializerError;
 
 public final class Settings {
@@ -25,6 +27,8 @@ public final class Settings {
 	public static String INDEX_DIR_PATH;
 	public static File indexDir;
 	public static ArrayList<String> libraryList;
+	
+	static Logger logger = Logger.getAnonymousLogger();
 
 	public Settings(String realPath) throws ExceptionInInitializerError{
 		
@@ -57,13 +61,13 @@ public final class Settings {
 		
 		destinationDir = new File(realLibraryPath);
 		destinationDir.mkdir();
-		System.out.println("destinationDir:"+destinationDir.getAbsolutePath());
+		logger.log(Level.INFO,"destinationDir:"+destinationDir.getAbsolutePath());
 		if(!destinationDir.isDirectory()) {
 			throw new ExceptionInInitializerError(realLibraryPath+" is not a directory");
 		}
 		indexDir = new File(realIndexPath);
 		indexDir.mkdir();
-		System.out.println("indexDir:"+indexDir.getAbsolutePath());
+		logger.log(Level.INFO,"indexDir:"+indexDir.getAbsolutePath());
 		if(!indexDir.isDirectory()){
 			throw new ExceptionInInitializerError("INDEX_DIR_PATH"+" is not a directory");
 		}
