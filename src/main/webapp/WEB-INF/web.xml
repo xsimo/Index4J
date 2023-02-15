@@ -15,6 +15,16 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
+		<servlet-name>Adjust</servlet-name>
+		<servlet-class>ca.diro.javadocindexer.servlets.AddIndexNameServlet</servlet-class>
+		
+	</servlet>
+	<servlet>
+		<servlet-name>Status</servlet-name>
+		<servlet-class>ca.diro.javadocindexer.servlets.AddFieldStatusServlet</servlet-class>
+		
+	</servlet>
+	<servlet>
 		<servlet-name>Logout</servlet-name>
 		<!-- invalidates the session -->
 		<servlet-class>ca.diro.javadocindexer.servlets.LogoutServlet</servlet-class>
@@ -55,6 +65,14 @@
 	<servlet-mapping>
 		<servlet-name>Search</servlet-name>
 		<url-pattern>/Search.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Adjust</servlet-name>
+		<url-pattern>/upload/Adjust.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Status</servlet-name>
+		<url-pattern>/upload/Status.do</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Upload</servlet-name>
